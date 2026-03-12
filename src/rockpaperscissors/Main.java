@@ -1,6 +1,7 @@
 package rockpaperscissors;
 
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.net.URL;
@@ -25,6 +26,7 @@ public class Main {
 	public static void main(String[] args) {
 
 		Game game = new Game();
+		Save gameSave = new Save();
 
 		JFrame menuFrame = new JFrame("Rock Paper Scissors");
 
@@ -32,16 +34,18 @@ public class Main {
 		// LABELS
 		// =========================
 		JLabel userStatsJLabel = new JLabel("User: 0");
-		userStatsJLabel.setBounds(10, 0, 150, 30);
+		userStatsJLabel.setBounds(420, 0, 150, 30);
+		userStatsJLabel.setFont(new Font("Verdana", Font.BOLD, 15));
 
 		JLabel botStatsJLabel = new JLabel("Bot: 0");
-		botStatsJLabel.setBounds(10, 20, 150, 30);
+		botStatsJLabel.setBounds(10, 0, 150, 30);
+		botStatsJLabel.setFont(new Font("Verdana", Font.BOLD, 15));
 
 		JLabel showPlayerSelection = new JLabel();
-		showPlayerSelection.setBounds(170, 150, 64, 64);
+		showPlayerSelection.setBounds(146, 50, 64, 64);
 
 		JLabel showBotSelection = new JLabel();
-		showBotSelection.setBounds(240, 150, 64, 64);
+		showBotSelection.setBounds(290, 50, 64, 64);
 
 
 		// MENU BAR
@@ -74,16 +78,16 @@ public class Main {
 		// BUTTONS
 		// =========================
 		JButton rockbtn = new JButton("Taş");
-		rockbtn.setBounds(154, 350, 64, 64);
+		rockbtn.setBounds(138, 250, 64, 64);
 
 		JButton paperbtn = new JButton("Kağıt");
-		paperbtn.setBounds(218, 350, 64, 64);
+		paperbtn.setBounds(218, 250, 64, 64);
 
 		JButton scissorsbtn = new JButton("Makas");
-		scissorsbtn.setBounds(282, 350, 64, 64);
+		scissorsbtn.setBounds(298, 250, 64, 64);
 
 		JButton startButton = new JButton();
-		startButton.setBounds(150, 150, 200, 200);
+		startButton.setBounds(150, 100, 200, 200);
 
 
 		// LOAD IMAGES
@@ -139,6 +143,8 @@ public class Main {
 
 		// INITIAL VISIBILITY
 		// =========================
+		userStatsJLabel.setVisible(false);
+		botStatsJLabel.setVisible(false);
 		rockbtn.setVisible(false);
 		paperbtn.setVisible(false);
 		scissorsbtn.setVisible(false);
@@ -185,7 +191,7 @@ public class Main {
 		save.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				game.saveGame();
+				gameSave.saveTheGame(game,isThemeLight);
 				JOptionPane.showMessageDialog(menuFrame, "Game saved.");
 			}
 		});
@@ -193,7 +199,7 @@ public class Main {
 		exit.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				game.saveGame();
+				gameSave.saveTheGame(game,isThemeLight);
 				System.exit(0);
 			}
 		});
@@ -205,6 +211,13 @@ public class Main {
 				paperbtn.setVisible(true);
 				scissorsbtn.setVisible(true);
 				startButton.setVisible(false);
+				userStatsJLabel.setVisible(true);
+				botStatsJLabel.setVisible(true);
+
+				isThemeLight = gameSave.loadTheGame(game);
+
+				userStatsJLabel.setText("User: " + game.getPlayerStats());
+				botStatsJLabel.setText("Bot: " + game.getBotStats());
 			}
 		});
 
@@ -222,13 +235,13 @@ public class Main {
 				String botChoice = game.getSelectionOfBot();
 
 				switch (botChoice) {
-				case "rock":
+				case "Rock":
 					showBotSelection.setIcon(new ImageIcon(rockUrl));
 					break;
-				case "paper":
+				case "Paper":
 					showBotSelection.setIcon(new ImageIcon(paperUrl));
 					break;
-				case "scissors":
+				case "Scissors":
 					showBotSelection.setIcon(new ImageIcon(scissorsUrl));
 					break;
 				}
@@ -246,13 +259,13 @@ public class Main {
 				String botChoice = game.getSelectionOfBot();
 
 				switch (botChoice) {
-				case "rock":
+				case "Rock":
 					showBotSelection.setIcon(new ImageIcon(rockUrl));
 					break;
-				case "paper":
+				case "Paper":
 					showBotSelection.setIcon(new ImageIcon(paperUrl));
 					break;
-				case "scissors":
+				case "Scissors":
 					showBotSelection.setIcon(new ImageIcon(scissorsUrl));
 					break;
 				}
@@ -270,13 +283,13 @@ public class Main {
 				String botChoice = game.getSelectionOfBot();
 
 				switch (botChoice) {
-				case "rock":
+				case "Rock":
 					showBotSelection.setIcon(new ImageIcon(rockUrl));
 					break;
-				case "paper":
+				case "Paper":
 					showBotSelection.setIcon(new ImageIcon(paperUrl));
 					break;
-				case "scissors":
+				case "Scissors":
 					showBotSelection.setIcon(new ImageIcon(scissorsUrl));
 					break;
 				}
@@ -290,6 +303,18 @@ public class Main {
 				paperbtn.setVisible(true);
 				scissorsbtn.setVisible(true);
 				startButton.setVisible(false);
+				botStatsJLabel.setVisible(true);
+				userStatsJLabel.setVisible(true);
+
+				isThemeLight = gameSave.loadTheGame(game);
+				System.out.println(isThemeLight);
+
+				userStatsJLabel.setText("User: " + game.getPlayerStats());
+				botStatsJLabel.setText("Bot: " + game.getBotStats());
+
+				// Redraw and refresh the frame so visibility changes appear on screen
+				menuFrame.repaint();
+				menuFrame.revalidate();
 			}
 		});
 
@@ -309,10 +334,11 @@ public class Main {
 
 		// FRAME SETTINGS
 		// =========================
-		menuFrame.setSize(500, 500);
+		menuFrame.setSize(500, 400);
 		menuFrame.setLayout(null);
 		menuFrame.setResizable(false);
 		menuFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		menuFrame.setVisible(true);
 	}
+	
 }

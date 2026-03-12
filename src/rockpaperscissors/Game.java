@@ -4,6 +4,8 @@ import java.util.Random;
 
 public class Game {
 	
+
+	
 	Random random = new Random();
 
 	private int playerStats = 0, botStats = 0;
@@ -53,13 +55,13 @@ public class Game {
 	public String saveSelectionOfBot(int value) {
 		switch (value) {
 		case 1:
-			this.selectionOfBot = "rock";
+			this.selectionOfBot = "Rock";
 			break;
 		case 2:
-			this.selectionOfBot = "paper";
+			this.selectionOfBot = "Paper";
 			break;
 		case 3:
-			this.selectionOfBot = "scissors";
+			this.selectionOfBot = "Scissors";
 			break;
 		default:
 			throw new IllegalArgumentException("Unexpected value: " + value);
